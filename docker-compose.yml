@@ -2,6 +2,11 @@ services:
   db:
     image: mysql:8.4
     restart: unless-stopped
+    command:
+      - --performance-schema=OFF
+      - --innodb-buffer-pool-size=128M
+      - --innodb-log-buffer-size=8M
+      - --max-connections=40
     environment:
       MYSQL_DATABASE: app_db
       MYSQL_USER: app_user
@@ -36,6 +41,9 @@ services:
       MYSQL_PASSWORD: app_password
       MYSQL_HOST: db
       MYSQL_PORT: 3306
+      GUNICORN_WORKERS: "2"
+      GUNICORN_THREADS: "2"
+      GUNICORN_TIMEOUT: "60"
     ports:
       - "8000:8000"
 
